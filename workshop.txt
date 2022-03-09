@@ -1,0 +1,15 @@
+version=1
+id=2771764837
+title=Status Messages
+description=It's often easy to miss some events in-game. This mod works to resolve that by adding "Status Messages" above the character's head for specific events.  This adds another layer of notification to the human that something has occurred.
+description=
+description=Currently the following events are tracked:
+description=[list]
+description=  [*] Weapon jams
+description=  [*] Weapon requires reload
+description=  [*] Weather changes
+description=[/list]
+description=
+description=This was designed solely for use on the Space Brothers' server but may be published publicly at some point.
+tags=Build 41;Misc;Silly/Fun
+visibility=unlisted
