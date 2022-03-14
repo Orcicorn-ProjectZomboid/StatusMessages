@@ -53,7 +53,7 @@ local function weatherPeriodStart(WeatherPeriod)
         msg = "Uh oh, a Blizzard"
     end
     if WeatherPeriod:hasHeavyRain() then
-        msg = "Looks like rain"
+        msg = "Looks like heavy rain"
     end
     if WeatherPeriod:hasStorm() then
         msg = "Feels like a Thunderstorm"
@@ -66,26 +66,37 @@ local function weatherPeriodStart(WeatherPeriod)
         HaloMessage(msg)
     end
 end
-
 local function weaponMessages(character, weapon)
-    local player = getPlayer()
-
-    -- Multiplayer fix: Only show halo messages for the player character
-    -- ignore all messages from nearby multi-players
-    if character == player then
-        -- If the weapon is ranged... ranged messages
-        if weapon:isRanged() then
-            -- Jammed?
-            if weapon:isJammed() then
-                HaloMessage("FUCKING JAMMED!", font_red)
-            end
-            -- Reload?
-            if weapon:isRoundChambered() ~= true then
-                HaloMessage("Need to reload")
-            end
+    -- Local Player only, Weapon must exist and weapon needs ammo
+    -- No longer checking for weapon:isRanged() as some mods act strangely so just check for ammo
+    if character:isLocalPlayer() then
+        if weapon ~= nil then
+            if weapon:getAmmoType() ~= nil then
+                -- Get Bullet count
+                bullets = weapon:getCurrentAmmoCount();
+                if weapon:isRoundChambered() then
+                    bullets = bullets + 1;
+                end
+                -- STATUS: Jammed
+                if weapon:isJammed() then
+                    debug("Weapon is jammed");
+                    HaloMessage("FUCKING JAMMED!", font_red);
+                end
+                -- STATUS: Reload
+                if bullets < 1 then
+                    debug("Weapon needs reloading");
+                    HaloMessage("Need to reload")
+                end
+                -- STATUS: Rack
+                if weapon:haveChamber() and weapon:isRoundChambered() == false and bullets > 0 then
+                    debug("Weapon needs to be racked");
+                    HaloMessage("Need to rack")
+                end
+            end 
         end
     end
 end
+
 
 -----------------------------------------------------------------------
 -- Event Bindings -----------------------------------------------------
