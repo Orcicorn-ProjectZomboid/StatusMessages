@@ -2,6 +2,7 @@
 -- Local Globals ------------------------------------------------------
 -----------------------------------------------------------------------
 local announceEvents = 0
+local bite_history = 0
 local is_debug = false
 local font_white = HaloTextHelper.getColorWhite()
 local font_red = HaloTextHelper.getColorRed()
@@ -59,6 +60,25 @@ local function announceLogin()
     -- which is the first announcement event
     processGeneralMessage("has connected")
     announceEvents = 2
+end
+
+local function checkBites(player)
+    -- Count Bites by looping through body parts
+    local bodyParts = player:getBodyDamage():getBodyParts()
+    local bodyPartIndex = BodyPartType.ToIndex(BodyPartType.MAX) - 1
+    local biteCount = 0
+    for i = 0, bodyPartIndex do
+        if bodyParts:get(i):bitten() then
+            biteCount = biteCount + 1
+        end 
+    end
+
+    -- if the bite count is different than bite history, announce 
+    -- we have a new bite
+    if biteCount ~= bite_history then 
+        HaloMessage("FUCK I'M BIT!", font_red)
+    end
+    bite_history = biteCount
 end
 
 local function weatherPeriodStop(weatherperiod)
@@ -124,5 +144,6 @@ Events.OnWeatherPeriodStart.Add(weatherPeriodStart)
 Events.OnWeatherPeriodStop.Add(weatherPeriodStop)
 Events.OnWeaponSwing.Add(weaponMessages)
 Events.OnGameTimeLoaded.Add(announceLogin)
+Events.OnPlayerUpdate.Add(checkBites)
 --DEBUG: Event Parameters
 --Events.OnWeaponSwing.Add(function(...) printEvent("OnWeaponSwing", ...) end)
