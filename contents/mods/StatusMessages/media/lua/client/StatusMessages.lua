@@ -1,6 +1,7 @@
 -----------------------------------------------------------------------
 -- Local Globals ------------------------------------------------------
 -----------------------------------------------------------------------
+local announceEvents = 0
 local is_debug = false
 local font_white = HaloTextHelper.getColorWhite()
 local font_red = HaloTextHelper.getColorRed()
@@ -42,6 +43,24 @@ end
 -----------------------------------------------------------------------
 -- Event Handlers -----------------------------------------------------
 -----------------------------------------------------------------------
+local function announceLogin()
+    -- Only for clients and only ever do it once
+    if not isClient() or announceEvents >= 2 then
+        return
+    end
+
+    -- First time attempting this always fails, wait for 2nd
+    if announceEvents == 0 then
+        announceEvents = announceEvents + 1
+        return
+    end
+
+    -- If you made it this far you're a client and it's the 2nd try
+    -- which is the first announcement event
+    processGeneralMessage("has connected")
+    announceEvents = 2
+end
+
 local function weatherPeriodStop(weatherperiod)
     debug("Weather Stop")
     HaloMessage("Finally clearing up")
@@ -104,5 +123,6 @@ end
 Events.OnWeatherPeriodStart.Add(weatherPeriodStart)
 Events.OnWeatherPeriodStop.Add(weatherPeriodStop)
 Events.OnWeaponSwing.Add(weaponMessages)
+Events.OnGameTimeLoaded.Add(announceLogin)
 --DEBUG: Event Parameters
 --Events.OnWeaponSwing.Add(function(...) printEvent("OnWeaponSwing", ...) end)
