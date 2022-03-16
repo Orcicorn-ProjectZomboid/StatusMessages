@@ -1,9 +1,10 @@
 -----------------------------------------------------------------------
 -- Local Globals ------------------------------------------------------
 -----------------------------------------------------------------------
-local time_loaded = 0                            -- 0: First connect, 1: In-Game Load, 2+: Redundancy
-local bite_history = 0
-local is_debug = false
+local is_debug = false                              -- <-- DEBUG MODE ON/OFF (Console messages)
+local time_loaded = 0                               -- 0: First connect, 1: In-Game Load, 2+: Redundancy
+local bite_history = 0                              -- Bite count since last update
+local scratch_history = 0                           -- Scratch count since last update
 local font_white = HaloTextHelper.getColorWhite()
 local font_red = HaloTextHelper.getColorRed()
 local font_green = HaloTextHelper.getColorGreen()
@@ -67,18 +68,40 @@ local function checkBites(player)
     local bodyParts = player:getBodyDamage():getBodyParts()
     local bodyPartIndex = BodyPartType.ToIndex(BodyPartType.MAX) - 1
     local biteCount = 0
+    local scratchCount = 0
     for i = 0, bodyPartIndex do
         if bodyParts:get(i):bitten() then
             biteCount = biteCount + 1
         end 
+        if bodyParts:get(i):scratched() then
+            scratchCount = scratchCount + 1
+        end 
     end
 
-    -- if the bite count is different than bite history, announce 
-    -- we have a new bite
-    if biteCount ~= bite_history then 
-        HaloMessage("FUCK I'M BIT!", font_red)
+    debug("Bites: " .. biteCount)
+    debug("Scratches: " .. scratchCount)
+
+    -- If there is atleast one bite and it is different from the last update
+    -- then say I'm bit. if you're online, add that to the chat messages too
+    if biteCount > 0 then 
+        if biteCount ~= bite_history then 
+            -- Oopsie, we're bit!
+            HaloMessage("FUCK I'M BIT!", font_red)
+            -- If we're online, warn others
+            if isClient() and time_loaded >= 2 then
+                processGeneralMessage("has been bit")
+            end
+        end
+        bite_history = biteCount
     end
-    bite_history = biteCount
+
+    -- Scratched?
+    if scratchCount > 0 then 
+        if scratchCount > scratch_history then
+            HaloMessage("Just a scratch", font_green)
+        end 
+    end
+    scratch_history = scratchCount
 end
 
 local function weatherPeriodStop(weatherperiod)
