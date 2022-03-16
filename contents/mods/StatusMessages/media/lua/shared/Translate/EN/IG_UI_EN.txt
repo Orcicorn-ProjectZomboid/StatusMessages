@@ -1,0 +1,17 @@
+IGUI_EN = {
+    IGUI_ChatText_Connected = "has connected",
+    IGUI_ChatText_Bite = "has been bit",
+
+    IGUI_PlayerText_Bite = "FUCK I'M BIT!",
+    IGUI_PlayerText_Scratch = "Just a scratch",
+
+    IGUI_PlayerText_WeatherClear = "Finally clearing up",
+    IGUI_PlayerText_WeatherBlizzard = "Uh oh, a Blizzard",
+    IGUI_PlayerText_WeatherHeavyRain = "Looks like heavy rain",
+    IGUI_PlayerText_WeatherStorm = "Feels like a Thunderstorm",
+    IGUI_PlayerText_WeatherTropical = "Oh fuck, a tropical storm",
+
+    IGUI_PlayerText_WeaponJam = "JAMMED!",
+    IGUI_PlayerText_WeaponReload = "Need to reload",
+    IGUI_PlayerText_WeaponRack = "Need to rack",
+}

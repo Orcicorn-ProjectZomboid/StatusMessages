@@ -73,7 +73,7 @@ local function announceLogin()
     if time_loaded == 0 then 
         time_loaded = 1;
     elseif time_loaded == 1 then
-        processGeneralMessage("has connected");
+        processGeneralMessage(getText("IGUI_ChatText_Connected"));
         time_loaded = 2;
     end
 end
@@ -106,10 +106,10 @@ local function checkBites(player)
     if biteCount > 0 then 
         if biteCount ~= bite_history then 
             -- Oopsie, we're bit!
-            HaloMessage("FUCK I'M BIT!", font_red);
+            HaloMessage(getText("IGUI_PlayerText_Bite"), font_red);
             -- If we're online, warn others
             if isClient() and time_loaded >= 2 then
-                processGeneralMessage("has been bit");
+                processGeneralMessage(getText("IGUI_ChatText_Bite"));
             end
         end
     end
@@ -119,7 +119,7 @@ local function checkBites(player)
     -- we checked, we have a new scratch. Just a simple halo message is fine
     if scratchCount > 0 then 
         if scratchCount > scratch_history then
-            HaloMessage("Just a scratch", font_green);
+            HaloMessage(getText("IGUI_PlayerText_Scratch"), font_green);
         end 
     end
     scratch_history = scratchCount;
@@ -131,7 +131,7 @@ local function weatherPeriodStop(weatherperiod)
     -- @event       OnWeatherPeriodStop()
     -- @params      WeatherPeriod class
     debug("Weather Stop");
-    HaloMessage("Finally clearing up");
+    HaloMessage(getText("IGUI_PlayerText_WeatherClear"));
 end
 
 
@@ -142,16 +142,16 @@ local function weatherPeriodStart(WeatherPeriod)
 
     local msg = ""
     if WeatherPeriod:hasBlizzard() then
-        msg = "Uh oh, a Blizzard";
+        msg = getText("IGUI_PlayerText_WeatherBlizzard");
     end
     if WeatherPeriod:hasHeavyRain() then
-        msg = "Looks like heavy rain";
+        msg = getText("IGUI_PlayerText_WeatherHeavyRain");
     end
     if WeatherPeriod:hasStorm() then
-        msg = "Feels like a Thunderstorm";
+        msg = getText("IGUI_PlayerText_WeatherStorm");
     end
     if WeatherPeriod:hasTropical() then
-        msg = "Oh fuck, a tropical storm";
+        msg = getText("IGUI_PlayerText_WeatherTropical");
     end
 
     if msg ~= "" then
@@ -178,17 +178,17 @@ local function weaponMessages(character, weapon)
                 -- STATUS: Jammed
                 if weapon:isJammed() then
                     debug("Weapon is jammed");
-                    HaloMessage("FUCKING JAMMED!", font_red);
+                    HaloMessage(getText("IGUI_PlayerText_WeaponJam"), font_red);
                 end
                 -- STATUS: Reload
                 if bullets < 1 then
                     debug("Weapon needs reloading");
-                    HaloMessage("Need to reload");
+                    HaloMessage(getText("IGUI_PlayerText_WeaponReload"));
                 end
                 -- STATUS: Rack
                 if weapon:haveChamber() and weapon:isRoundChambered() == false and bullets > 0 then
                     debug("Weapon needs to be racked");
-                    HaloMessage("Need to rack");
+                    HaloMessage(getText("IGUI_PlayerText_WeaponRack"));
                 end
             end 
         end
