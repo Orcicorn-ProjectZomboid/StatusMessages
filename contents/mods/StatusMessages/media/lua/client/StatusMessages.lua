@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 -- Local Globals ------------------------------------------------------
 -----------------------------------------------------------------------
-local announceEvents = 0
+local time_loaded = 0                            -- 0: First connect, 1: In-Game Load, 2+: Redundancy
 local bite_history = 0
 local is_debug = false
 local font_white = HaloTextHelper.getColorWhite()
@@ -45,21 +45,21 @@ end
 -- Event Handlers -----------------------------------------------------
 -----------------------------------------------------------------------
 local function announceLogin()
-    -- Only for clients and only ever do it once
-    if not isClient() or announceEvents >= 2 then
+    -- If not a client or already announced, abort asap
+    if not isClient() or time_loaded >= 2 then
         return
     end
 
-    -- First time attempting this always fails, wait for 2nd
-    if announceEvents == 0 then
-        announceEvents = announceEvents + 1
-        return
+    -- Event triggers more than once. First time it triggers is when
+    -- client is loaded and this is too soon to send a message. Wait for
+    -- the second trigger which is in-world loaded. Any subsequent trigger
+    -- is not our concern
+    if time_loaded == 0 then 
+        time_loaded = 1
+    elseif time_loaded == 1 then
+        processGeneralMessage("has connected")
+        time_loaded = 2
     end
-
-    -- If you made it this far you're a client and it's the 2nd try
-    -- which is the first announcement event
-    processGeneralMessage("has connected")
-    announceEvents = 2
 end
 
 local function checkBites(player)
