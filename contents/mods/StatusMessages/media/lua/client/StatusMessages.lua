@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 -- Local Globals ------------------------------------------------------
 -----------------------------------------------------------------------
-local is_debug = true;                             -- <-- DEBUG MODE ON/OFF (Console messages)
+local is_debug = false;                             -- <-- DEBUG MODE ON/OFF (Console messages)
 local time_loaded = 0;                              -- 0: First connect, 1: In-Game Load, 2+: Redundancy
 local bite_history = 0;                             -- Bite count since last update
 local scratch_history = 0;                          -- Scratch count since last update
