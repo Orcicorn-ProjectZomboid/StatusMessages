@@ -82,9 +82,12 @@ local function announceDeath(player)
     -- @desc    When the player dies, send a text message to chat
     -- @event   OnCharacterDeath()
     -- @params  IsoGameCharacter class
+    -- Multiplayer? No? Stop
     if not isClient() then
         return;
     end 
+
+    -- Is it you? Don't announce others deaths
     if character:isLocalPlayer() then
         processGeneralMessage(getText("IGUI_ChatText_Dead"));
     end
@@ -220,6 +223,7 @@ Events.OnWeatherPeriodStart.Add(weatherPeriodStart);            -- Storm beings
 Events.OnWeaponSwing.Add(weaponMessages)                        -- Weapon attack finishes
 Events.OnGameTimeLoaded.Add(announceLogin)                      -- Connection
 Events.OnPlayerUpdate.Add(checkBites)                           -- Damage taken
+Events.OnCharacterDeath.Add(announceDeath)                      -- Died
 
 --DEBUG: Event Parameters
 --Events.OnWeaponSwing.Add(function(...) printEvent("OnWeaponSwing", ...) end)
