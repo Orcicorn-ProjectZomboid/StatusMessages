@@ -78,6 +78,18 @@ local function announceLogin()
     end
 end
 
+local function announceDeath(player)
+    -- @desc    When the player dies, send a text message to chat
+    -- @event   OnCharacterDeath()
+    -- @params  IsoGameCharacter class
+    if not isClient() then
+        return;
+    end 
+    if character:isLocalPlayer() then
+        processGeneralMessage(getText("IGUI_ChatText_Dead"));
+    end
+end
+
 
 local function checkBites(player)
     -- @desc        When the player character damage is updated, check for new bites and scratches
