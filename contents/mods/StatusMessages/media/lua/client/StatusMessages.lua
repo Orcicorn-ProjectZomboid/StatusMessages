@@ -116,8 +116,12 @@ local function checkBites(player)
     -- If there is atleast one bite and it is different from the last update
     -- then say I'm bit. if you're online, add that to the chat messages too
     if biteCount > 0 then 
-        if biteCount ~= bite_history then 
-            -- Oopsie, we're bit!
+        -- When you are bit the bite history is increased by one.  We do this because if you bandage then
+        -- your bite count goes down. If you change the bandage the game goes "OH GOD A NEW BITE"! Which is
+        -- incorrect. So now we only remember bite history if it's increased by 1 and we only announce
+        -- if it's a bit count greater than our known bite history
+        if biteCount > bite_history then 
+            bite_history = biteCount;
             HaloMessage(getText("IGUI_PlayerText_Bite"), font_red);
             -- If we're online, warn others
             if isClient() and time_loaded >= 2 then
@@ -125,7 +129,7 @@ local function checkBites(player)
             end
         end
     end
-    bite_history = biteCount;
+    
 
     -- If there is atleast one scratch and it is greater than the last time
     -- we checked, we have a new scratch. Just a simple halo message is fine
