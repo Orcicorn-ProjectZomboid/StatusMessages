@@ -78,17 +78,18 @@ local function announceLogin()
     end
 end
 
-local function announceDeath(player)
+local function announceDeath(character)
     -- @desc    When the player dies, send a text message to chat
     -- @event   OnCharacterDeath()
     -- @params  IsoGameCharacter class
-    -- Multiplayer? No? Stop
-    if not isClient() then
-        return;
-    end 
 
-    -- Is it you? Don't announce others deaths
-    if player:isLocalPlayer() then
+    -- Make sure the instance of this is a Human Player
+    if not instanceof(character, "IsoPlayer") then
+        return
+    end
+
+    -- Only do it if YOU are the one that died. Ignore everyone else
+    if character:isLocalPlayer() then
         processGeneralMessage(getText("IGUI_ChatText_Dead"));
     end
 end
