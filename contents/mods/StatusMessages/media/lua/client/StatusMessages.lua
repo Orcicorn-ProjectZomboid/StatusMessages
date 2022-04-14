@@ -183,7 +183,12 @@ end
 local function weaponMessages(character, weapon)
     -- @desc        After each attack, see if the player needs to know something is wrong
     -- @event       OnWeaponSwing
-    -- @params      IsoGameCharacter, HandWeapon
+    -- @params      IsoGameCharacter->IsoPlayer, HandWeapon
+
+    -- Make sure the instance of this is a Human Player
+    if not instanceof(character, "IsoPlayer") then
+        return
+    end
 
     -- Local Player only, Weapon must exist and weapon needs ammo
     -- No longer checking for weapon:isRanged() as some mods act strangely so just check for ammo
