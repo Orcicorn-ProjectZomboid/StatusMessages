@@ -88,7 +88,7 @@ local function announceDeath(player)
     end 
 
     -- Is it you? Don't announce others deaths
-    if character:isLocalPlayer() then
+    if player:isLocalPlayer() then
         processGeneralMessage(getText("IGUI_ChatText_Dead"));
     end
 end
