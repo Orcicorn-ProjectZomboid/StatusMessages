@@ -1,11 +1,10 @@
 -----------------------------------------------------------------------
 -- Local Globals ------------------------------------------------------
 -----------------------------------------------------------------------
-local is_debug = false;                             -- <-- DEBUG MODE ON/OFF (Console messages)
 local time_loaded = 0;                              -- 0: First connect, 1: In-Game Load, 2+: Redundancy
 local bite_history = 0;                             -- Bite count since last update
 local scratch_history = 0;                          -- Scratch count since last update
-local announced_sleep = false;                      -- Did we already announce sleep?
+local announced_sleep = false;                      -- Only announce asleep once per event
 local font_white = HaloTextHelper.getColorWhite();  -- White halo message
 local font_red = HaloTextHelper.getColorRed();      -- Red halo message
 local font_green = HaloTextHelper.getColorGreen();  -- Green halo message
@@ -22,23 +21,10 @@ local function HaloMessage(message, color)
     if color == nil then
         color = font_white;
     end
-    
-    -- Can't call debug from here for some reason, do it manually
-    if is_debug == true then
-        print("DEBUG: HALO: " .. message);
-    end
+    -- print("DEBUG: HALO: " .. message);
 
     -- Add status message to player halo text
     HaloTextHelper.addText(getSpecificPlayer(0), message, color);
-end
-
-
-local function debug(message)
-    --  @desc       Adds console messages when the script is running in debug mode (see is_debug)
-    --  @params     required        string      The message to print to the console
-    if is_debug == true then
-        print(message);
-    end
 end
 
 
@@ -138,8 +124,8 @@ local function checkBites(player)
         end 
     end
 
-    debug("Bites: Current " .. biteCount .. " vs History " .. bite_history);
-    debug("Scratches: Current " .. scratchCount .. " vs History " .. scratch_history);
+    --print("Bites: Current " .. biteCount .. " vs History " .. bite_history);
+    --print("Scratches: Current " .. scratchCount .. " vs History " .. scratch_history);
 
     -- If there is atleast one bite and it is different from the last update
     -- then say I'm bit. if you're online, add that to the chat messages too
@@ -171,7 +157,7 @@ local function weatherPeriodStop(weatherperiod)
     -- @desc        When a weather storm has finished, just make a simple halo message about it
     -- @event       OnWeatherPeriodStop()
     -- @params      WeatherPeriod class
-    debug("Weather Stop");
+    --print("Weather Stop");
     HaloMessage(getText("IGUI_PlayerText_WeatherClear"));
 end
 
@@ -223,17 +209,17 @@ local function weaponMessages(character, weapon)
                 end
                 -- STATUS: Jammed
                 if weapon:isJammed() then
-                    debug("Weapon is jammed");
+                    --print("Weapon is jammed");
                     HaloMessage(getText("IGUI_PlayerText_WeaponJam"), font_red);
                 end
                 -- STATUS: Reload
                 if bullets < 1 then
-                    debug("Weapon needs reloading");
+                    --print("Weapon needs reloading");
                     HaloMessage(getText("IGUI_PlayerText_WeaponReload"));
                 end
                 -- STATUS: Rack
                 if weapon:haveChamber() and weapon:isRoundChambered() == false and bullets > 0 then
-                    debug("Weapon needs to be racked");
+                    --print("Weapon needs to be racked");
                     HaloMessage(getText("IGUI_PlayerText_WeaponRack"));
                 end
             end 
