@@ -5,6 +5,7 @@ local is_debug = false;                             -- <-- DEBUG MODE ON/OFF (Co
 local time_loaded = 0;                              -- 0: First connect, 1: In-Game Load, 2+: Redundancy
 local bite_history = 0;                             -- Bite count since last update
 local scratch_history = 0;                          -- Scratch count since last update
+local announced_sleep = false;                      -- Did we already announce sleep?
 local font_white = HaloTextHelper.getColorWhite();  -- White halo message
 local font_red = HaloTextHelper.getColorRed();      -- Red halo message
 local font_green = HaloTextHelper.getColorGreen();  -- Green halo message
@@ -94,6 +95,29 @@ local function announceDeath(character)
     end
 end
 
+local function announceSleep(player)
+    -- If Asleep and announced (True/True) no need to process
+    -- If NOt Asleep and not announced (False/False) no need to process
+    if player:isAsleep() == announced_sleep then return end
+
+    if player:isAsleep() then
+        if announced_sleep == false then 
+            -- Player is asleep and we have not announced it
+            -- announce it and make not of it
+            processGeneralMessage(getText("IGUI_ChatText_Sleep"))
+            HaloMessage(getText("IGUI_PlayerText_Sleep"), font_white)
+            announced_sleep = true
+        end
+    else
+        if announced_sleep == true then
+            -- Player is awake, so reset announcement status
+            -- so that the next time they sleep, it'll announce
+            HaloMessage(getText("IGUI_PlayerText_Wakeup"), font_white)
+            announced_sleep = false
+        end
+    end
+
+end
 
 local function checkBites(player)
     -- @desc        When the player character damage is updated, check for new bites and scratches
@@ -226,6 +250,7 @@ Events.OnWeatherPeriodStart.Add(weatherPeriodStart);            -- Storm beings
 Events.OnWeaponSwing.Add(weaponMessages)                        -- Weapon attack finishes
 Events.OnGameTimeLoaded.Add(announceLogin)                      -- Connection
 Events.OnPlayerUpdate.Add(checkBites)                           -- Damage taken
+Events.OnPlayerUpdate.Add(announceSleep)                        -- Sleeping?
 Events.OnCharacterDeath.Add(announceDeath)                      -- Died
 
 --DEBUG: Event Parameters

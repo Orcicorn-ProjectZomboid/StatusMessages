@@ -2,9 +2,12 @@ IGUI_EN = {
     IGUI_ChatText_Connected = "has connected",
     IGUI_ChatText_Bite = "has been bit",
     IGUI_ChatText_Dead = "has died",
+    IGUI_ChatText_Sleep = "is sleeping",
 
     IGUI_PlayerText_Bite = "FUCK I'M BIT!",
     IGUI_PlayerText_Scratch = "Just a scratch",
+    IGUI_PlayerText_Sleep = "z z Z z z",
+    IGUI_PlayerText_Wakeup = "*Yawn*",
 
     IGUI_PlayerText_WeatherClear = "Finally clearing up",
     IGUI_PlayerText_WeatherBlizzard = "Uh oh, a Blizzard",
