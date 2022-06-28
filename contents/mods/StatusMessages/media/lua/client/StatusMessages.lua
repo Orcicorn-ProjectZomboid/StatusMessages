@@ -90,16 +90,21 @@ local function announceSleep(player)
         if announced_sleep == false then 
             -- Player is asleep and we have not announced it
             -- announce it and make not of it
+            -- print("I've gone to sleep")
             processGeneralMessage(getText("IGUI_ChatText_Sleep"))
             HaloMessage(getText("IGUI_PlayerText_Sleep"), font_white)
             announced_sleep = true
+            announced_awake = false
         end
     else
-        if announced_sleep == true then
+        if announced_awake == false then
             -- Player is awake, so reset announcement status
             -- so that the next time they sleep, it'll announce
+            -- print("I've woken up")
+            processGeneralMessage(getText("IGUI_ChatText_Awake"))
             HaloMessage(getText("IGUI_PlayerText_Wakeup"), font_white)
             announced_sleep = false
+            announced_awake = true
         end
     end
 
